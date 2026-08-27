@@ -74,5 +74,9 @@ Issue ID.
 - Khong tu merge khi chua kiem tra thay doi va ket qua CI.
 - Moi trao doi review phai duoc giai quyet truoc khi merge.
 - Khong force-push hoac xoa `prod` va `staging`.
+- Neu thay doi behavior, API, data, UI, deployment hoac operations, cap nhat
+  nhom tai lieu tuong ung trong [`docs/`](docs/README.md) cung PR.
+- PR phai lien ket requirement va test case theo
+  [`docs/traceability.md`](docs/traceability.md) khi feature co tai lieu chi tiet.
 - Khi team co tu hai reviewer, bat buoc it nhat mot approval trong branch
   protection cua `prod` va `staging`.
