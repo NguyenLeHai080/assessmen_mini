@@ -1,0 +1,66 @@
+name: Commit messages
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  branch-flow:
+    name: Validate branch flow
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check source and target branches
+        shell: bash
+        env:
+          BASE_BRANCH: ${{ github.base_ref }}
+          HEAD_BRANCH: ${{ github.head_ref }}
+        run: |
+          valid=false
+
+          case "$BASE_BRANCH:$HEAD_BRANCH" in
+            dev:feat/*|dev:staging|staging:dev|staging:prod|prod:staging|prod:dev|prod:hotfix/*)
+              valid=true
+              ;;
+          esac
+
+          if [[ "$valid" != true ]]; then
+            echo "::error::Unsupported branch flow: $HEAD_BRANCH -> $BASE_BRANCH"
+            echo "Allowed flows: feat/* -> dev -> staging -> prod; hotfix/* -> prod; prod -> staging -> dev."
+            exit 1
+          fi
+
+  validate:
+    name: Validate issue references
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Require Issue ID for development commits
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          tracked_types='^(feat|fix|refactor|perf|test|docs)(\([^)]*\))?!?:[[:space:]]'
+          issue_reference='#[0-9]+([[:space:]]|$)'
+          failed=0
+
+          mapfile -t commits < <(git log --format='%H%x09%s' "$BASE_SHA..$HEAD_SHA")
+
+          for entry in "${commits[@]}"; do
+            hash="${entry%%$'\t'*}"
+            message="${entry#*$'\t'}"
+
+            if [[ "$message" =~ $tracked_types ]] && [[ ! "$message" =~ $issue_reference ]]; then
+              echo "::error::Commit ${hash:0:7} must include an Issue ID such as #123: $message"
+              failed=1
+            fi
+          done
+
+          exit "$failed"
