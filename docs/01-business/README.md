@@ -12,6 +12,13 @@ he thong duoc code.
 - `<feature>-business-rules.md`: cac `RULE-*`, input va ket qua.
 - `<feature>-requirements.md`: cac `BR-*`, priority va business acceptance.
 
+## Mini Assessment
+
+- [Business Requirements](mini-assessment-business-requirements.md)
+- [Business Process](mini-assessment-process.md)
+- [Business Rules](mini-assessment-business-rules.md)
+- [Glossary](glossary.md)
+
 ## Khong dat tai day
 
 - Endpoint/request/response: dat trong `04-api/`.

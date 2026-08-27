@@ -1,0 +1,17 @@
+.ma-app { max-width: 1000px; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.12); color: #1d2327; }
+.ma-form { background: #f6f7f7; padding: 16px; margin: 16px 0; border-radius: 6px; }
+.ma-form-row { display: flex; gap: 10px; margin-bottom: 10px; }
+.ma-form input, .ma-form select, .ma-form textarea { box-sizing: border-box; width: 100%; padding: 8px; margin-bottom: 10px; }
+.ma-form-row input, .ma-form-row select { margin-bottom: 0; }
+.ma-form button, .ma-table button, .ma-pagination button { padding: 7px 12px; cursor: pointer; }
+.ma-table-wrap { overflow-x: auto; }
+.ma-table { width: 100%; border-collapse: collapse; text-align: left; }
+.ma-table th, .ma-table td { padding: 10px; border-bottom: 1px solid #e5e5e5; vertical-align: top; }
+.ma-table th { background: #f0f0f1; }
+.ma-badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 12px; }
+.ma-published { background: #d1e7dd; color: #0f5132; } .ma-draft { background: #fff3cd; color: #664d03; } .ma-archived { background: #e2e3e5; color: #41464b; }
+.ma-question { padding: 14px; border: 1px solid #e5e5e5; border-radius: 6px; margin: 12px 0; }
+.ma-error { padding: 10px; margin: 12px 0; background: #f8d7da; color: #842029; border-radius: 4px; }
+.ma-muted { color: #646970; } .ma-link { border: 0; background: none; color: #2271b1; padding: 0; cursor: pointer; }
+.ma-pagination { display: flex; gap: 6px; margin-top: 14px; }
+@media (max-width: 640px) { .ma-form-row { flex-direction: column; } }
