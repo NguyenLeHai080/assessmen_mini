@@ -20,6 +20,8 @@ vao `docs/` neu file do thuoc mot nhom ben duoi.
 | [`11-project/`](11-project/README.md) | Team phoi hop the nao? | Git workflow, ownership, risk, decision log va release note |
 | [`templates/`](templates/README.md) | Bat dau tai lieu moi tu dau? | Cac mau tai lieu dung chung |
 
+Tai lieu cu the cua module Mini Assessment: [business requirements](01-business/mini-assessment-business-requirements.md), [process](01-business/mini-assessment-process.md), [rules](01-business/mini-assessment-business-rules.md), [API](04-api/mini-assessment-api.md), [data model](05-data/mini-assessment-data-model.md) va [test plan](07-testing/mini-assessment-test-plan.md).
+
 ## Quy tac phan loai nhanh
 
 - Mo ta loi ich, quy trinh cua nguoi dung hoac quy tac tinh toan: `01-business/`.

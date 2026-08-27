@@ -6,6 +6,12 @@ khong co lien ket; moi ID nen tro den heading hoac file cu the.
 | Business | Requirement | Design | API/Data/UI | Test | Issue/PR | Release |
 | --- | --- | --- | --- | --- | --- | --- |
 | BR-001 | FR-001, NFR-001 | ADR-001 | API-001, DATA-001, UI-001 | TC-001 | #123 / #456 | v1.0.0 |
+| BR-001 | FR-001 | - | mini-assessment.php, Activator | TC-001 | #9 | 1.0.0 |
+| BR-002 | FR-002, FR-003 | - | DATA-001 / Activator seed | TC-002, TC-003 | #9 | 1.0.0 |
+| BR-003 | FR-005, FR-006, FR-007 | - | API-001 / Admin UI | TC-005, TC-006, TC-007 | #9 | 1.0.0 |
+| BR-004 | FR-004, FR-008 | - | API-001 / React detail | TC-001, TC-002, TC-008 | #9 | 1.0.0 |
+| BR-005 | FR-009, NFR-002 | - | Runtime config / API client | TC-009 | #9 | 1.0.0 |
+| BR-006 | FR-010, NFR-005 | - | build-zip.sh / dist | TC-010 | #9 | 1.0.0 |
 
 ## Kiem tra theo chieu doc
 
