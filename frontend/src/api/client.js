@@ -9,12 +9,14 @@ const config = window.miniAssessmentConfig || {
 };
 
 const apiClient = axios.create({
-  baseURL: config.apiUrl,
   headers: {
     'Content-Type': 'application/json',
     'X-WP-Nonce': config.nonce
   }
 });
+
+// Keep WordPress's query-style rest_route intact when pretty permalinks are off.
+export const apiEndpoint = (path = '') => `${config.apiUrl.replace(/\/$/, '')}/${path.replace(/^\//, '')}`;
 
 apiClient.interceptors.response.use(
   (response) => response.data.data,
