@@ -60,6 +60,16 @@ class Submission_API extends REST_Base {
             ];
         }
 
+        $active_questions = $this->questions->all_by_assessment($assessment_id, true);
+        if (count($validated) !== count($active_questions)) {
+            return $this->invalid('Can tra loi day du tat ca cau hoi dang hoat dong.');
+        }
+        foreach ($active_questions as $question) {
+            if (!isset($validated[(int) $question['id']])) {
+                return $this->invalid('Can tra loi day du tat ca cau hoi dang hoat dong.');
+            }
+        }
+
         $item = $this->submissions->create($assessment_id, array_values($validated));
         if (!$item) {
             Logger::error('Unable to persist submission.', ['assessment_id' => $assessment_id]);

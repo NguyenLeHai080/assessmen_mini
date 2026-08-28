@@ -42,4 +42,21 @@ class Submission_DB {
 
         return ['id' => $attempt_id, 'assessment_id' => $assessment_id, 'score' => $score];
     }
+
+    public function delete_by_assessment($assessment_id) {
+        $attempt_ids = $this->wpdb->get_col($this->wpdb->prepare(
+            "SELECT id FROM {$this->attempts} WHERE assessment_id = %d",
+            $assessment_id
+        ));
+
+        if ($attempt_ids) {
+            $placeholders = implode(',', array_fill(0, count($attempt_ids), '%d'));
+            $this->wpdb->query($this->wpdb->prepare(
+                "DELETE FROM {$this->answers} WHERE attempt_id IN ($placeholders)",
+                $attempt_ids
+            ));
+        }
+
+        return $this->wpdb->delete($this->attempts, ['assessment_id' => $assessment_id], ['%d']) !== false;
+    }
 }

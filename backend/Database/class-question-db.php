@@ -18,9 +18,10 @@ class Question_DB {
         ), ARRAY_A);
     }
 
-    public function all_by_assessment($assessment_id) {
+    public function all_by_assessment($assessment_id, $public_only = false) {
+        $where = $public_only ? " AND status = 'active'" : '';
         return $this->wpdb->get_results($this->wpdb->prepare(
-            "SELECT * FROM {$this->table} WHERE assessment_id = %d ORDER BY sort_order ASC, id ASC",
+            "SELECT * FROM {$this->table} WHERE assessment_id = %d{$where} ORDER BY sort_order ASC, id ASC",
             $assessment_id
         ), ARRAY_A);
     }
