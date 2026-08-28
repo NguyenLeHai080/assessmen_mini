@@ -5,6 +5,7 @@ class Admin_Page {
     public function __construct() {
         add_action('admin_menu', [$this, 'register_menu']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_assets']);
+        add_shortcode('mini_assessment', [$this, 'render_shortcode']);
     }
 
     public function register_menu() {
@@ -23,6 +24,16 @@ class Admin_Page {
         if ($hook !== 'toplevel_page_mini-assessment') {
             return;
         }
+
+        $this->enqueue_app_assets();
+    }
+
+    public function render_shortcode() {
+        $this->enqueue_app_assets();
+        return '<div id="mini-assessment-root"></div>';
+    }
+
+    private function enqueue_app_assets() {
 
         $js_file = MINI_ASSESSMENT_PATH . 'dist/bundle.js';
         $css_file = MINI_ASSESSMENT_PATH . 'dist/bundle.css';
@@ -49,7 +60,8 @@ class Admin_Page {
         }
 
         wp_localize_script('mini-assessment-react', 'miniAssessmentConfig', [
-            'apiUrl' => esc_url_raw(rest_url('assessment/v1')),
+            // Query-style REST URLs work whether pretty permalinks are enabled or not.
+            'apiUrl' => esc_url_raw(add_query_arg('rest_route', '/assessment/v1', home_url('/'))),
             'nonce' => wp_create_nonce('wp_rest'),
             'isLoggedIn' => is_user_logged_in(),
             'canManage' => current_user_can('edit_posts'),

@@ -18,6 +18,13 @@ class Answer_DB {
         ), ARRAY_A);
     }
 
+    public function find($id) {
+        return $this->wpdb->get_row($this->wpdb->prepare(
+            "SELECT * FROM {$this->table} WHERE id = %d",
+            $id
+        ), ARRAY_A);
+    }
+
     public function create($data) {
         $this->wpdb->insert($this->table, $data, ['%d', '%s', '%d', '%d', '%s', '%s']);
         $id = (int) $this->wpdb->insert_id;
