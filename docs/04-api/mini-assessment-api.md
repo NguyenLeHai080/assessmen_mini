@@ -53,7 +53,8 @@ List `data` contains `items` and `pagination` (`total`, `page`, `per_page`,
 - Assessment title is required; status is `draft`, `published` or `archived`.
 - Question/answer content and parent IDs are required.
 - Submission accepts `answers`, an array of `{question_id, answer_id}`. Each
-  pair must belong to the published assessment in the URL.
+  pair must belong to the published assessment in the URL, and every active
+  question must be answered exactly once.
 - `sort_order` is normalized to a non-negative integer.
 - Unknown parent returns 404; invalid payload returns 422.
 

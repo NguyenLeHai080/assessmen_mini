@@ -37,12 +37,13 @@ class Question_API extends REST_Base {
 
     public function get_questions_by_assessment($request) {
         $assessment_id = (int) $request['id'];
-        $assessment = $this->assessments->find($assessment_id, !(is_user_logged_in() && current_user_can('edit_posts')));
+        $can_manage = is_user_logged_in() && current_user_can('edit_posts');
+        $assessment = $this->assessments->find($assessment_id, !$can_manage);
         if (!$assessment) {
             return $this->not_found('Khong tim thay bai danh gia.');
         }
 
-        $questions = $this->questions->all_by_assessment($assessment_id);
+        $questions = $this->questions->all_by_assessment($assessment_id, !$can_manage);
         foreach ($questions as &$question) {
             $question['answers'] = $this->answers->all_by_question((int) $question['id']);
         }
