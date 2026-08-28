@@ -60,8 +60,8 @@ class Admin_Page {
         }
 
         wp_localize_script('mini-assessment-react', 'miniAssessmentConfig', [
-            // Query-style REST URLs work whether pretty permalinks are enabled or not.
-            'apiUrl' => esc_url_raw(add_query_arg('rest_route', '/assessment/v1', home_url('/'))),
+            // WordPress resolves the correct host and subdirectory for this installation.
+            'apiUrl' => esc_url_raw(rest_url('assessment/v1')),
             'nonce' => wp_create_nonce('wp_rest'),
             'isLoggedIn' => is_user_logged_in(),
             'canManage' => current_user_can('edit_posts'),
