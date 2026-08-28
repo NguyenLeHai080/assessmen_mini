@@ -25,8 +25,8 @@ Copy-Item -LiteralPath (Join-Path $projectRoot 'mini-assessment.php') -Destinati
 Copy-Item -LiteralPath (Join-Path $projectRoot 'README.md') -Destination $packagePath
 Copy-Item -LiteralPath (Join-Path $projectRoot 'backend') -Destination $packagePath -Recurse
 Copy-Item -LiteralPath (Join-Path $projectRoot 'dist') -Destination $packagePath -Recurse
-$packageItems = Get-ChildItem -LiteralPath $packagePath
-Compress-Archive -Path $packageItems.FullName -DestinationPath $zipPath -Force
+# tar writes POSIX entry separators, which WordPress on Linux extracts correctly.
+tar.exe -a -c -f $zipPath -C $packagePath .
 if (-not (Test-Path -LiteralPath $zipPath)) {
     throw "Archive was not created: $zipPath"
 }

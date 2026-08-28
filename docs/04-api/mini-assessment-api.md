@@ -13,8 +13,10 @@ Base URL: `/wp-json/assessment/v1`
 
 - `GET` list/detail/questions/answers: public reads are allowed, but public data
   is filtered to `published` assessments.
-- `POST`, `POST /assessments/{id}`, `DELETE`: require logged-in user with
-  `edit_posts` capability and header `X-WP-Nonce` from `wp_create_nonce('wp_rest')`.
+- `POST`, `PUT/PATCH /assessments/{id}`, `DELETE`, `POST /questions`, and
+  `POST /answers`: require a user with `edit_posts`. WordPress admin uses
+  `X-WP-Nonce`; API clients such as Postman may use Basic Auth with a WordPress
+  Application Password.
 - 401 means no login; 403 means insufficient capability.
 
 ## Endpoints
@@ -24,12 +26,13 @@ Base URL: `/wp-json/assessment/v1`
 | GET | `/assessments?page=1&per_page=10` | List assessments with pagination | 200 |
 | POST | `/assessments` | Create assessment | 201 |
 | GET | `/assessments/{id}` | Read one assessment | 200/404 |
-| POST | `/assessments/{id}` | Update title/description/status | 200/404 |
+| PUT/PATCH | `/assessments/{id}` | Update title/description/status | 200/404/422 |
 | DELETE | `/assessments/{id}` | Delete assessment and children | 200/404 |
 | GET | `/assessments/{id}/questions` | Read nested questions/answers | 200/404 |
 | POST | `/questions` | Create question under assessment | 201 |
 | GET | `/questions/{id}/answers` | Read answers for question | 200/404 |
 | POST | `/answers` | Create answer under question | 201 |
+| POST | `/assessments/{id}/submissions` | Submit selected public answers | 201 |
 
 ## Response envelope
 
@@ -49,10 +52,13 @@ List `data` contains `items` and `pagination` (`total`, `page`, `per_page`,
 
 - Assessment title is required; status is `draft`, `published` or `archived`.
 - Question/answer content and parent IDs are required.
+- Submission accepts `answers`, an array of `{question_id, answer_id}`. Each
+  pair must belong to the published assessment in the URL.
 - `sort_order` is normalized to a non-negative integer.
 - Unknown parent returns 404; invalid payload returns 422.
 
 ## Runtime URL rule
 
-The admin page injects `rest_url('assessment/v1')`; frontend must never contain a
-fixed hostname or `/wp-json` path for a specific environment.
+The admin page injects a WordPress-generated REST URL; frontend must never
+contain a fixed hostname. On servers without pretty permalink support, use
+`/?rest_route=/assessment/v1/...`.

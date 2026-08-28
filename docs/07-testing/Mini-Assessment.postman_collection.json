@@ -1,0 +1,138 @@
+{
+  "info": {
+    "_postman_id": "9d1d6a12-f9d7-471e-8f40-7ba0a1ecf299",
+    "name": "Mini Assessment - WordPress REST API",
+    "description": "Import this collection into Postman. Set wpUsername and wpApplicationPassword before running protected requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost/assessmen_wp" },
+    { "key": "wpUsername", "value": "admin" },
+    { "key": "wpApplicationPassword", "value": "" },
+    { "key": "assessmentId", "value": "" },
+    { "key": "questionId", "value": "" },
+    { "key": "answerId", "value": "" }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      { "key": "username", "value": "{{wpUsername}}", "type": "string" },
+      { "key": "password", "value": "{{wpApplicationPassword}}", "type": "string" }
+    ]
+  },
+  "item": [
+    {
+      "name": "1. Public - List published assessments",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/?rest_route=/assessment/v1/assessments&page=1&per_page=10"
+      },
+      "event": [{
+        "listen": "test",
+        "script": { "type": "text/javascript", "exec": [
+          "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+          "pm.test('Response is successful', function () { pm.expect(pm.response.json().success).to.eql(true); });"
+        ] }
+      }]
+    },
+    {
+      "name": "2. Admin - Create assessment",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"title\": \"Postman API test\",\n  \"description\": \"Created by the Postman collection\",\n  \"status\": \"draft\"\n}" },
+        "url": "{{baseUrl}}/?rest_route=/assessment/v1/assessments"
+      },
+      "event": [{
+        "listen": "test",
+        "script": { "type": "text/javascript", "exec": [
+          "pm.test('Status is 201', function () { pm.response.to.have.status(201); });",
+          "const body = pm.response.json();",
+          "pm.expect(body.success).to.eql(true);",
+          "pm.collectionVariables.set('assessmentId', body.data.id);"
+        ] }
+      }]
+    },
+    {
+      "name": "3. Admin - Create question",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"assessment_id\": {{assessmentId}},\n  \"content\": \"Which HTTP status means success?\",\n  \"sort_order\": 1\n}" },
+        "url": "{{baseUrl}}/?rest_route=/assessment/v1/questions"
+      },
+      "event": [{
+        "listen": "test",
+        "script": { "type": "text/javascript", "exec": [
+          "pm.test('Status is 201', function () { pm.response.to.have.status(201); });",
+          "const body = pm.response.json();",
+          "pm.collectionVariables.set('questionId', body.data.id);"
+        ] }
+      }]
+    },
+    {
+      "name": "4. Admin - Create answer",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"question_id\": {{questionId}},\n  \"content\": \"200\",\n  \"score\": 10,\n  \"sort_order\": 1\n}" },
+        "url": "{{baseUrl}}/?rest_route=/assessment/v1/answers"
+      },
+      "event": [{
+        "listen": "test",
+        "script": { "type": "text/javascript", "exec": [
+          "pm.test('Status is 201', function () { pm.response.to.have.status(201); });",
+          "const body = pm.response.json();",
+          "pm.collectionVariables.set('answerId', body.data.id);"
+        ] }
+      }]
+    },
+    {
+      "name": "5. Admin - Publish assessment",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{ \"status\": \"published\" }" },
+        "url": "{{baseUrl}}/?rest_route=/assessment/v1/assessments/{{assessmentId}}"
+      },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status is 200', function () { pm.response.to.have.status(200); });"
+      ] } }]
+    },
+    {
+      "name": "6. Public - Get questions and answers",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/?rest_route=/assessment/v1/assessments/{{assessmentId}}/questions"
+      },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+        "pm.test('Question has answers', function () { pm.expect(pm.response.json().data[0].answers.length).to.be.above(0); });"
+      ] } }]
+    },
+    {
+      "name": "7. Public - Submit assessment",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "auth": { "type": "noauth" },
+        "body": { "mode": "raw", "raw": "{\n  \"answers\": [\n    { \"question_id\": {{questionId}}, \"answer_id\": {{answerId}} }\n  ]\n}" },
+        "url": "{{baseUrl}}/?rest_route=/assessment/v1/assessments/{{assessmentId}}/submissions"
+      },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status is 201', function () { pm.response.to.have.status(201); });",
+        "pm.test('Score is 10', function () { pm.expect(pm.response.json().data.score).to.eql(10); });"
+      ] } }]
+    },
+    {
+      "name": "8. Admin - Delete test assessment",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/?rest_route=/assessment/v1/assessments/{{assessmentId}}"
+      },
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status is 200', function () { pm.response.to.have.status(200); });"
+      ] } }]
+    }
+  ]
+}

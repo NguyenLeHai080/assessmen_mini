@@ -8,5 +8,6 @@ export const assessmentService = {
   deleteAssessment: (id) => apiClient.delete(`/assessments/${id}`),
   getQuestions: (assessmentId) => apiClient.get(`/assessments/${assessmentId}/questions`),
   createQuestion: (data) => apiClient.post('/questions', data),
-  createAnswer: (data) => apiClient.post('/answers', data)
+  createAnswer: (data) => apiClient.post('/answers', data),
+  submitAssessment: (id, answers) => apiClient.post(`/assessments/${id}/submissions`, { answers })
 };

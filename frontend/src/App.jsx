@@ -39,6 +39,10 @@ export default function App() {
       await selectAssessment(selected);
     } catch (err) { setError(getErrorMessage(err)); }
   };
+  const submitAssessment = async (answers) => {
+    try { setError(''); return await assessmentService.submitAssessment(selected.id, answers); }
+    catch (err) { setError(getErrorMessage(err)); return null; }
+  };
 
   return <div className="ma-app">
     <h2>Mini Assessment</h2>
@@ -46,7 +50,7 @@ export default function App() {
     {config.canManage && !selected && <AssessmentForm onSubmit={createAssessment} />}
     {selected ? <>
       {config.canManage && <QuestionForm assessmentId={selected.id} onSubmit={createQuestion} />}
-      <AssessmentDetail assessment={selected} questions={questions} loading={loading} onBack={() => { setSelected(null); setQuestions([]); loadAssessments(); }} />
+      <AssessmentDetail assessment={selected} questions={questions} loading={loading} canManage={config.canManage} onSubmit={submitAssessment} onBack={() => { setSelected(null); setQuestions([]); loadAssessments(); }} />
     </> : <AssessmentList assessments={assessments} pagination={pagination} loading={loading} onSelect={selectAssessment} onPageChange={loadAssessments} />}
   </div>;
 }

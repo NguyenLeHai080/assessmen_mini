@@ -29,7 +29,7 @@ activation, persistence, API and admin integration.
 ## Module responsibilities
 
 - `mini-assessment.php`: constants, file loading and WordPress hooks.
-- `Database/Activator`: dbDelta schema, seed idempotency and rewrite refresh.
+- `Database/Activator`: dbDelta schema migration and rewrite refresh.
 - `Database/*_DB`: query/persistence boundary per aggregate.
 - `API/REST_Base`: response helpers and capability guard.
 - `API/*_API`: REST route registration, validation and orchestration.

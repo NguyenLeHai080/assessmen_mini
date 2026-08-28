@@ -13,9 +13,11 @@ Related docs: ../01-business/mini-assessment-business-requirements.md, ../04-api
 2. Upload `mini-assessment.zip`, activate plugin and confirm no WSOD/fatal error.
 3. Verify `{prefix}assessment`, `{prefix}assessment_questions` and
    `{prefix}assessment_answers` exist.
-4. Verify one seeded assessment, two questions and five answers.
+4. Create a published assessment, question and answers through the admin UI.
 5. Open `Mini Assessment`; confirm bundle loads and list/detail render.
-6. Repeat deactivate/activate; confirm seed is not duplicated.
+6. Add `[mini_assessment]` to a page; confirm a visitor can select answers and
+   submit a published assessment.
+7. Repeat deactivate/activate; confirm schema migration is idempotent.
 
 ## API scenarios
 
@@ -29,6 +31,7 @@ Related docs: ../01-business/mini-assessment-business-requirements.md, ../04-api
 | TC-006 | Missing title/parent/content | 422 |
 | TC-007 | Create question + answer | 201; nested in detail |
 | TC-008 | Delete assessment | Children removed; no orphan rows |
+| TC-009 | Public submission | 201; attempt and selected answers are persisted |
 
 ## Packaging scenarios
 
