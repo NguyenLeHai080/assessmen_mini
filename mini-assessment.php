@@ -45,7 +45,6 @@ add_action('plugins_loaded', function () {
         MiniAssessment\Database\Activator::activate();
     }
 
-    if (is_admin()) {
-        new MiniAssessment\Admin\Admin_Page();
-    }
+    // Also register the shortcode on public pages; its asset hook is admin-only.
+    new MiniAssessment\Admin\Admin_Page();
 });
