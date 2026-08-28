@@ -42,6 +42,9 @@ class Answer_API extends REST_Base {
             return $this->not_found('Khong tim thay cau hoi.');
         }
         $can_manage = is_user_logged_in() && current_user_can('edit_posts');
+        if (!$can_manage && $question['status'] !== 'active') {
+            return $this->not_found('Khong tim thay cau hoi.');
+        }
         if (!$this->assessments->find((int) $question['assessment_id'], !$can_manage)) {
             return $this->not_found('Khong tim thay cau hoi.');
         }

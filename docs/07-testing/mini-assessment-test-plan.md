@@ -32,6 +32,10 @@ Related docs: ../01-business/mini-assessment-business-requirements.md, ../04-api
 | TC-007 | Create question + answer | 201; nested in detail |
 | TC-008 | Delete assessment | Children removed; no orphan rows |
 | TC-009 | Public submission | 201; attempt and selected answers are persisted |
+| TC-010 | Submission misses an active question | 422; no attempt is persisted |
+| TC-011 | Public reads inactive question or answers | 404/not exposed |
+| TC-012 | Unknown resource | 404 with WordPress REST error envelope |
+| TC-013 | Database persistence failure | 500; request is logged with `[mini-assessment]` prefix |
 
 ## Packaging scenarios
 

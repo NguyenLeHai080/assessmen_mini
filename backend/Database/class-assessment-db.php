@@ -48,6 +48,7 @@ class Assessment_DB {
     }
 
     public function delete_with_children($id) {
+        $submission_db = new Submission_DB();
         $question_table = $this->wpdb->prefix . 'assessment_questions';
         $answer_table = $this->wpdb->prefix . 'assessment_answers';
         $question_ids = $this->wpdb->get_col($this->wpdb->prepare(
@@ -61,6 +62,10 @@ class Assessment_DB {
                 "DELETE FROM $answer_table WHERE question_id IN ($placeholders)",
                 $question_ids
             ));
+        }
+
+        if (!$submission_db->delete_by_assessment($id)) {
+            return false;
         }
 
         $this->wpdb->delete($question_table, ['assessment_id' => $id], ['%d']);
